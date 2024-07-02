@@ -1,0 +1,33 @@
+- name: Install RDS Session Host role
+  win_feature:
+    name: RDS-RD-Server
+    state: present
+
+- name: Install necessary features for RDSH
+  win_feature:
+    name:
+      - RDS-RD-Server
+      - RDS-Gateway
+      - RDS-Licensing
+      - RDS-Connection-Broker
+    state: present
+
+    # - name: Configure RD Session Host settings
+    #   win_shell: |
+    #     Import-Module RemoteDesktop
+    #     Set-RDSessionHost -SessionHost $env:COMPUTERNAME -ConnectionBroker $env:COMPUTERNAME
+
+    # - name: Configure RDS Licensing Mode
+    #   win_shell: |
+    #     Import-Module RemoteDesktop
+    #     Set-RDLicenseConfiguration -LicenseServer $env:COMPUTERNAME -Mode PerUser -ConnectionBroker $env:COMPUTERNAME
+    # 
+    # - name: Configure User Groups for RDSH
+    #   win_shell: |
+    #     net localgroup "Remote Desktop Users" /add "DOMAIN\YourUserGroup"
+
+- name: Restart Remote Desktop Services
+  win_service:
+    name: TermService
+    state: restarted
+

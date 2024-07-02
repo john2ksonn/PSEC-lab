@@ -1,0 +1,223 @@
+{
+    "lab" : {
+        "hosts" : {
+            "dc01" : {
+                "hostname" : "dc",
+                "type" : "dc",
+                "local_admin_password": "EalwxkfhqsdP+xh7sdfzaRk6j90",
+                "domain" : "aafabrik.lab",
+                "path" : "DC=aafabrik,DC=lab",
+                "use_laps": false,
+                "local_groups" : {
+                    "Administrators" : [
+                        "aafabrik\\dcadmins"
+                    ]
+                },
+                "scripts" : [
+                    "asrep_roasting.ps1",
+                    "expose_dns.ps1",
+                    "rdp_scheduler.ps1",
+                    "rdp_pth.ps1"
+                ],
+                "vulns" : ["directory", "files"],
+                "vulns_vars" : {
+                    "directory": {
+                        "setup": "c:\\setup",
+                        "anna_desktop": "c:\\Users\\anna.bluetenbach\\Desktop"
+                    },
+                    "files" : {
+                        "sysvol" : {
+                            "src" : "setup_printers.ps1",
+                            "dest" : "\\\\aafabrik.lab\\SYSVOL\\aafabrik.lab\\scripts\\"
+                        },
+                        "sysmon" : {
+                            "src" : "Sysmon.zip",
+                            "dest" : "c:\\Sysmon.zip"
+                        },
+                        "sysmonconfig" : {
+                            "src" : "sysmonconfig.xml",
+                            "dest" : "c:\\sysmonconfig.xml"
+                        },
+                        "eventviewer" : {
+                            "src" : "eventviewer_config",
+                            "dest" : "c:\\"
+                        },
+                        "processhacker" : {
+                            "src" : "processhacker.zip",
+                            "dest" : "c:\\processhacker.zip"
+                        },
+                        "rdp" : {
+                            "src" : "dc/bot_rdp.ps1",
+                            "dest" : "c:\\setup\\bot_rdp.ps1"
+                        },
+                        "flag": {
+                            "src" : "dc/pth_flag.txt",
+                            "dest" : "c:\\Users\\anna.bluetenbach\\Desktop\\flag.txt"
+                        }
+                    }
+                }
+            },
+            "srv01" : {
+                "hostname" : "srv",
+                "type" : "server",
+                "local_admin_password": "EalwxkfhqsdP+xh7sdfzaRk6j90",
+                "domain" : "aafabrik.lab",
+                "path" : "DC=aafabrik,DC=lab",
+                "use_laps": true,
+                "local_groups" : {
+                    "Administrators" : [
+                        "aafabrik\\dcadmins",
+                        "aafabrik\\srvadmins"
+                    ],
+                    "Remote Desktop Users" : [
+                        "aafabrik\\srvadmins"
+                    ]
+                },
+                "scripts" : [
+                    "sshd_server.ps1",
+                    "block_rdp.ps1"
+                ],
+                "vulns" : ["openshares","files"],
+                "vulns_vars" : {
+                    "files" : {
+                        "sysmon" : {
+                            "src" : "Sysmon.zip",
+                            "dest" : "c:\\Sysmon.zip"
+                        },
+                        "sysmonconfig" : {
+                            "src" : "sysmonconfig.xml",
+                            "dest" : "c:\\sysmonconfig.xml"
+                        },
+                        "eventviewer" : {
+                            "src" : "eventviewer_config",
+                            "dest" : "c:\\"
+                        },
+                        "processhacker" : {
+                            "src" : "processhacker.zip",
+                            "dest" : "c:\\processhacker.zip"
+                        }
+                    }
+                }
+            }
+        },
+        "domains" : {
+            "aafabrik.lab" : {
+                "dc": "dc01",
+                "domain_password" : "EalwxkfhqsdP+xh7sdfzaRk6j90",
+                "netbios_name": "AAFABRIK",
+                "groups" : {
+                    "global" : {
+                        "dcadmins" : {
+                            "managed_by" : "anna.bluetenbach",
+                            "path" : "CN=Users,DC=aafabrik,DC=lab"
+                        },
+                        "srvadmins" : {
+                            "managed_by" : "felix.frucht",
+                            "path" : "CN=Users,DC=aafabrik,DC=lab"
+                        }
+                    }
+                },
+                "acls" : {
+                    "anonymous_rpc" : {"for": "NT AUTHORITY\\ANONYMOUS LOGON", "to": "DC=aafabrik,DC=lab", "right": "ReadProperty", "inheritance": "All"},
+                    "anonymous_rpc2" : {"for": "NT AUTHORITY\\ANONYMOUS LOGON", "to": "DC=aafabrik,DC=lab", "right": "GenericExecute", "inheritance": "All"}
+                },
+                "users" : {
+                    "anna.bluetenbach" : {
+                        "firstname"   : "Anna",
+                        "surname"     : "Blütenbach",
+                        "password"    : "iliketurtles", 
+                        "city"        : "Obsthausen",
+                        "description" : "Anna Blütenbach",
+                        "groups"      : ["dcadmins","srvadmins"],
+                        "path"        : "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "felix.frucht" : {
+                        "firstname"   : "Felix",
+                        "surname"     : "Frucht",
+                        "password"    : "k1w1fru1t",
+                        "city"        : "Obsthausen",
+                        "description" : "Felix Frucht",
+                        "groups"      : ["srvadmins"],
+                        "path"        : "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "lena.obstfeld" : {
+                        "firstname"   : "Lena",
+                        "surname"     : "Obstfeld",
+                        "password"    : "cyber4pple",
+                        "city"        : "Obsthausen",
+                        "description" : "Lena Obstfeld",
+                        "groups"      : [],
+                        "path"        : "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "sophie.weingarten" : {
+                        "firstname"   : "Sophie",
+                        "surname"     : "Weingarten",
+                        "password"    : "iloveorangejuice",
+                        "city"        : "Obsthausen",
+                        "description" : "Sophie Weingarten (flag{M4st3r_0f_AD_D0m41n_R3c0nn41ss4nc3})",
+                        "groups"      : [],
+                        "path"        : "CN=Users,DC=aafabrik,DC=lab",
+                        "spns"        : ["HTTP/srv.aafabrik.lab"]
+                    },
+                    "karl.apfelmann" : {
+                        "firstname"   : "Karl",
+                        "surname"     : "Apfelmann",
+                        "__password"    : "juicyfru1t",
+                        "_password"    : "karl.apfelmann",
+                        "password"    : "Sommer2024!",
+                        "city"        : "Obsthausen",
+                        "description" : "Karl Apfelmann",
+                        "groups"      : [],
+                        "path"        : "CN=Users,DC=aafabrik,DC=lab"
+                    },
+
+                    "peter.pfirsich": {
+                        "firstname": "Peter",
+                        "surname": "Pfirsich",
+                        "password": "peachy123",
+                        "city": "Pfirsichstadt",
+                        "description": "Peter Pfirsich",
+                        "groups": [],
+                        "path": "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "lisa.limonade": {
+                        "firstname": "Lisa",
+                        "surname": "Limonade",
+                        "password": "lemonade2023",
+                        "city": "Limona",
+                        "description": "Lisa Limonade",
+                        "groups": [],
+                        "path": "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "martin.melone": {
+                        "firstname": "Martin",
+                        "surname": "Melone",
+                        "password": "melonmania!",
+                        "city": "Melonville",
+                        "description": "Martin Melone",
+                        "groups": [],
+                        "path": "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "sophia.sauerkraut": {
+                        "firstname": "Sophia",
+                        "surname": "Sauerkraut",
+                        "password": "picklepower",
+                        "city": "Sauerkrauten",
+                        "description": "Sophia Sauerkraut",
+                        "groups": [],
+                        "path": "CN=Users,DC=aafabrik,DC=lab"
+                    },
+                    "jonas.johannisbeere": {
+                        "firstname": "Jonas",
+                        "surname": "Johannisbeere",
+                        "password": "redcurrant55",
+                        "city": "Johannisbeeren",
+                        "description": "Jonas Johannisbeere",
+                        "groups": [],
+                        "path": "CN=Users,DC=aafabrik,DC=lab"
+                    }
+                }
+            }
+        }
+    }
+}

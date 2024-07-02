@@ -1,0 +1,4 @@
+flag{H@shSm@sh_RDP_M@g1c!}
+
+# Well done! You no longer need the RDP session and close it to save compute resources :)
+

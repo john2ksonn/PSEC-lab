@@ -1,0 +1,37 @@
+- [ ] Connect everything
+    - [ ] connect VM host to switch
+    - [ ] connect router to switch
+    - [ ] connect router to uplink (eth or wifi (welcome))
+    - [ ] connect router to power
+    - [ ] connect switch to power
+- [ ] wait for IP for VM host on 192.168.8.0
+- [ ] Optional: login to router dashboard
+- [ ] start the lab (`export VAGRANT_HOME=vagrant_home && ./goad.sh -t start -l PSEC -p virtualbox -m docker`)
+- [ ] start ctfd (docker compose in `src/CTFd`)
+- [ ] make sure DC DNS service only listens on 191.168.8.0
+- [ ] check if RDP as admin to DC is possible
+    - [ ] if not: `New-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Lsa" -Name DisableRestrictedAdmin -Value 0`
+- [ ] configure RDP on Domain Controller (in GUI)
+    - [ ] Open `Local Group Polic Editor`
+    - [ ] Goto `Computer Configuration -> Administrative Templates -> Windows
+      Components -> Remote Desktop Services -> Remote Desktop Session Host
+      -> Connections`
+    - [ ] Configure `Limit number of connections`
+    - [ ] Disable `Restrict RDS users to single RDS session`
+
+- [ ] Install Sysmon on `srv`
+    - [ ] Install Sysmon (`sysmon -i`)
+    - [ ] Configure Sysmon (`sysmon -c sysmonconfig.xml`)
+- [ ] import event viewer views on `srv`
+- [ ] import event viewer views on `dc`
+- [ ] connect via RDP as `anna.bluetenbach` from Host to `srv` to place hash
+- [ ] make sure that multiple RDP connections work to DC w/ same user
+- [ ] Check all CTFd flags
+- [ ] Check CTFd signup
+    - [ ] Optional: add DNS record for CTFd
+- [ ] start slides
+- [ ] start a jitsi meeting for screen sharing
+- [ ] publish WiFi password
+- [ ] publish cheat sheet
+- [ ] publish presentation slides
+

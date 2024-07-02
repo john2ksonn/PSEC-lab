@@ -9,14 +9,16 @@ LAB=
 PROVIDER=
 METHOD=
 JOB=
-PROVIDERS="virtualbox vmware azure proxmox"
+PROVIDERS="bridged-virtualbox virtualbox vmware azure proxmox"
 LABS=$(ls -A ad/ |grep -v 'TEMPLATE')
 TASKS="check install start stop status restart destroy disablevagrant enablevagrant"
-ANSIBLE_PLAYBOOKS="edr.yml build.yml ad-servers.yml ad-parent_domain.yml ad-child_domain.yml ad-members.yml ad-trusts.yml ad-data.yml ad-gmsa.yml laps.yml ad-relations.yml adcs.yml ad-acl.yml servers.yml security.yml vulnerabilities.yml reboot.yml elk.yml sccm-install.yml sccm-config.yml"
+ANSIBLE_PLAYBOOKS="rdp.yml edr.yml build.yml ad-servers.yml ad-parent_domain.yml ad-child_domain.yml ad-members.yml ad-trusts.yml ad-data.yml ad-gmsa.yml laps.yml ad-relations.yml adcs.yml ad-acl.yml servers.yml security.yml vulnerabilities.yml reboot.yml elk.yml sccm-install.yml sccm-config.yml"
 METHODS="local docker"
 ANSIBLE_ONLY=0
 ANSIBLE_PLAYBOOK=
 GOAD_VAGRANT_OPTIONS=
+### JOSO ####
+VAGRANT_HOME="/run/media/joso/data_disk/goad/GOAD/vagrant_home"
 GOAD_EXTENSIONS="elk"
 
 print_usage() {
@@ -158,7 +160,7 @@ install_providing(){
   provider=$2
 
   case $provider in
-    "virtualbox"|"vmware")
+    "bridged-virtualbox"|"virtualbox"|"vmware")
         cd "ad/$lab/providers/$provider"
         echo "${OK} launch vagrant"
         GOAD_VAGRANT_OPTIONS=$GOAD_VAGRANT_OPTIONS vagrant up
@@ -243,7 +245,7 @@ install_provisioning(){
   provider=$2
   method=$3
   case $provider in
-    "virtualbox"|"vmware"|"proxmox")
+    "bridged-virtualbox"|"virtualbox"|"vmware"|"proxmox")
         case $method in
           "local")
               if [ -z $ANSIBLE_PLAYBOOK ]; then
@@ -366,7 +368,7 @@ disablevagrant(){
 
 enablevagrant(){
   case $PROVIDER in
-    "virtualbox"|"vmware"|"proxmox")
+    "bridged-virtualbox"|"virtualbox"|"vmware"|"proxmox")
         case $METHOD in
           "local")
               cd ansible
@@ -424,7 +426,7 @@ check(){
 
 start(){
   case $PROVIDER in
-    "virtualbox"|"vmware")
+    "bridged-virtualbox"|"virtualbox"|"vmware")
           cd "ad/$LAB/providers/$PROVIDER"
           echo "${OK} start vms"
           GOAD_VAGRANT_OPTIONS=$GOAD_VAGRANT_OPTIONS vagrant up
@@ -459,7 +461,7 @@ start(){
 
 stop(){
   case $PROVIDER in
-    "virtualbox"|"vmware")
+    "bridged-virtualbox"|"virtualbox"|"vmware")
           cd "ad/$LAB/providers/$PROVIDER"
           echo "${OK} stop vms"
           GOAD_VAGRANT_OPTIONS=$GOAD_VAGRANT_OPTIONS vagrant halt
@@ -494,7 +496,7 @@ stop(){
 
 restart(){
   case $PROVIDER in
-    "virtualbox"|"vmware")
+    "bridged-virtualbox"|"virtualbox"|"vmware")
           cd "ad/$LAB/providers/$PROVIDER"
           echo "${OK} restart start vms"
           vagrant reload
@@ -531,7 +533,7 @@ restart(){
 
 destroy(){
   case $PROVIDER in
-    "virtualbox"|"vmware")
+    "bridged-virtualbox"|"virtualbox"|"vmware")
           cd "ad/$LAB/providers/$PROVIDER"
           echo "${OK} destroy the lab"
           read -r -p "Are you sure? [y/N] " response
@@ -560,7 +562,7 @@ destroy(){
 
 status(){
   case $PROVIDER in
-    "virtualbox"|"vmware")
+    "bridged-virtualbox"|"virtualbox"|"vmware")
           cd "ad/$LAB/providers/$PROVIDER"
           GOAD_VAGRANT_OPTIONS=$GOAD_VAGRANT_OPTIONS vagrant status
           cd -

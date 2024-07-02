@@ -12,7 +12,7 @@ echo "[+] Current folder $(pwd)"
 echo "[+] Current LAB : $LAB"
 echo "[+] Current PROVIDER : $PROVIDER"
 if [ -z  $ANSIBLE_COMMAND ]; then
-  export ANSIBLE_COMMAND="ansible-playbook -i ../ad/$LAB/data/inventory -i ../ad/$LAB/providers/$PROVIDER/inventory"
+  export ANSIBLE_COMMAND="ansible-playbook -vvv -i ../ad/$LAB/data/inventory -i ../ad/$LAB/providers/$PROVIDER/inventory"
 fi
 echo "[+] Ansible command : $ANSIBLE_COMMAND"
 
@@ -113,6 +113,29 @@ case $LAB in
         # replay client install fix some issue in enrollement for CLIENT
         run_ansible sccm-client.yml
         ;;
+    "PSEC")
+        # PSEC
+        echo "[+] Entering $LAB build"
+        run_ansible build.yml
+        run_ansible ad-servers.yml
+        run_ansible ad-parent_domain.yml
+        # Wait after the child domain creation before adding servers
+        # run_ansible ad-child_domain.yml
+        # echo "$INFO Waiting 5 minutes for the child domain to be ready"
+        # sleep 5m
+        run_ansible ad-members.yml
+        run_ansible ad-trusts.yml
+        run_ansible ad-data.yml
+        run_ansible ad-gmsa.yml
+        run_ansible laps.yml
+        run_ansible ad-relations.yml
+        run_ansible adcs.yml
+        run_ansible ad-acl.yml
+        run_ansible servers.yml
+        run_ansible security.yml
+        run_ansible vulnerabilities.yml
+        run_ansible reboot.yml
+      ;;
     *)
         # GOAD / GOAD-Light / others
         echo "[+] Entering $LAB build"
