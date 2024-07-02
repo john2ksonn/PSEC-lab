@@ -1,6 +1,6 @@
 # PSEC-lab
 
-This repo is based on the popular GOAD and contains our (David Kling and Johannes Sonn) PSEC lab for the exercise sessions for our "Practical Security" lecture. See `ad/PSEC` for most relevant files.
+This repo is based on the popular GOAD and contains our (David Kling and Johannes Sonn) PSEC lab for the exercise sessions for our "Practical Security" lecture. See [`ad/PSEC`](/ad/PSEC) for most relevant files.
 
 <div align="center">
   <h1><img alt="GOAD (Game Of Active Directory)" src="./docs/img/logo_GOAD.png"></h1>
